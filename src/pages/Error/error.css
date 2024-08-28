@@ -1,0 +1,25 @@
+section.error {
+
+    height: calc(100vh - 15vh);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+}
+
+strong {
+
+    font-size: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+P {
+
+    text-align: center;
+    font-size: 40px;
+
+}
