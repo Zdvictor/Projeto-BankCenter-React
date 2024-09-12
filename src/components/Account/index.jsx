@@ -7,6 +7,7 @@ import {doc, collection, query, where, getDocs, getDoc, updateDoc} from "firebas
 import { db } from "../../services/firebaseConnection";
 import {FiSettings} from "react-icons/fi"
 import Loading from "../Loading";
+import {ClipLoader} from "react-spinners" 
 
 import "./accountComponent.css"
 import { toast } from "react-toastify";
@@ -42,14 +43,16 @@ function MenuComponent(props) {
 
 
     const [input, setInput] = useState(false)
-    const [title, setTitle] = useState("")
+    const [title, setTitle] = useState("CONFIRMAR")
+    const [loading, setLoading] = useState(false)
+    const [cpf,setCpf] = useState("")
     const [value, setValue] = useState("")
     const [valueId, setValueId] = useState("")
     const [pix, setPix] = useState("")
     const [isDisabled, setIsDisable] = useState(false)
     const [transferencia, setTransferencia] = useState(false)
     const [activeInputValue, setActiveInputValue] = useState(false)
-    const [valor, setValor] = useState(null)
+    const [valor, setValor] = useState(0)
     const [uidTransfer, setUidTransfer] = useState(null)
     
 
@@ -91,33 +94,28 @@ function MenuComponent(props) {
 
     }
 
-    function handleTransferencia(e) {
-
-
-        setPix(cpfMask(e.target.value))
-
-        
-    
-
-    }
 
     async function handlePix() {
 
+        setLoading(true)
 
         if(transferencia) {
 
             if(valor == 0) {
 
                 toast.error("Digite um Valor")
+                setLoading(false)
+            
 
             }else {
 
-
+                setLoading(true)
                 const conta = props.user.saldo - valor
 
                 if(conta < 0) {
 
                     toast.error("Ops, Saldo Insuficiente")
+                    setLoading(false)
                     return
                 }
 
@@ -143,7 +141,7 @@ function MenuComponent(props) {
                         }).then(() => {
 
                             //Sucesso Agora Fazer Loading
-
+                            setLoading(false)
                             toast.success("Transação feita com sucesso")
 
                              var data = {
@@ -171,7 +169,7 @@ function MenuComponent(props) {
                     
 
                 }).catch(err => {
-
+                    setLoading(false)
                     console.log(err)
 
                 })
@@ -185,6 +183,7 @@ function MenuComponent(props) {
         if(props.user.cpf == pix) {
 
             toast.error("Você não pode transferir para você mesmo")
+            setLoading(false)
             return
         }
 
@@ -195,6 +194,7 @@ function MenuComponent(props) {
             if(value.empty) {
 
                 toast.error("CHAVE CPF INVÁLIDA")
+                setLoading(false)
                 return
 
             }
@@ -202,13 +202,14 @@ function MenuComponent(props) {
 
             value.forEach( user => {
 
-                
+                setLoading(false)
                 setIsDisable(true)
-                setPix(`Nome: ${user.data().name}`)
+                setPix(`${user.data().name.toUpperCase()}`)
                 setActiveInputValue(true)
                 setTitle("CONFIRMAR TRANSFERENCIA ?")
                 setTransferencia(true)
                 setUidTransfer(user.id)
+
                 
                 
                 
@@ -233,6 +234,8 @@ function MenuComponent(props) {
         setPix("")
         setIsDisable(false)
         setTitle("")
+        setLoading(false)
+        setValor(0)
 
 
     }
@@ -243,9 +246,18 @@ function MenuComponent(props) {
 
         <div className="account-container">
 
-        <section className="account-conteudo">
-            
+            <div className="area-logout">
 
+                <button onClick={deslogar} className="account-logout">
+                    SAIR
+                </button>
+
+            </div>
+
+        
+
+        <section className="account-conteudo">
+        
             <h1>Olá, seja bem-vindo(a) {props.name}</h1>
             
             <div className="account-saldo">
@@ -263,78 +275,45 @@ function MenuComponent(props) {
                     <button onClick={() => handleInput(1)}>PIX</button>
                 </div>
 
-                
-                <div className="transfencia">
-                    <img className="boleto" src={imgBoleto}/>
-                    <button onClick={() => handleInput(2)}>BOLETO</button>
-                </div>
-
-                
-                <div className="transfencia">
-                    <img className="recarga" src={imgCelular}/>
-                    <button onClick={() => handleInput(3)}>RECARGA</button>
-                </div>
-
             </div>
 
-            <div className="area-input">
+            {input && (
+
+                <div className="area-input">
+
+                <div style={{display: "flex", justifyContent: "end"}}>
+                    <button onClick={handleCancel} className="close">X</button>
+                </div>
 
 
-                {input && (
+                <p>PIX</p>
 
-                <>
-                
-                {valueId == 2 || valueId == 3 ?
-                 (
+                <h5 className="transfer-h5">Saldo Atual: R$: {props.saldo}</h5>
 
-                 <> 
+                <label htmlFor="">{!isDisabled ? "Digite a Chave CPF:" : "Nome do Usuario:"}</label>
+                <input disabled={isDisabled} value={pix} onChange={(e) => setPix(cpfMask(e.target.value))} type="text" />
 
-                 <input type="text" value={value} />   
-                 <button onClick={() => toast.error("Em Manutenção")} style={{cursor: "not-allowed"}}>{title}</button>
-
-                 </>
-
-                ) :
-                (
-                <>
-                    
-                    <button onClick={handleCancel} className="cancel">X</button>
-                    <input 
-                        onChange={handleTransferencia}
-                        placeholder={value}
-                        value={pix} 
-                        maxLength="14"
-                        disabled={isDisabled}
-                        
-                        />
-
-
-                    { activeInputValue && ( 
-                    <> 
-                    
-                     <input value={valor} onChange={(e) => setValor(e.target.value)} type="number" placeholder="R$ 10" style={{fontSize: 16}} />  
-                     </>
-                     )
-                     }    
-                        
-                    <button className={transferencia ?  "transfer" : "" } onClick={handlePix}>{title}</button>             
-                </>
-                )
-                
-                }
-                 
-
-                </>
-
-
+                {activeInputValue && (
+                    <>
+                    <label htmlFor="">Informe o Valor:</label>
+                    <input value={valor} onChange={(e) => setValor(e.target.value)} type="number" />
+                    </>
                 )}
-                
-            
-            </div>
 
-            <button onClick={deslogar} className="account-logout">
-                SAIR
-            </button>
+                {loading ?
+
+                <button><ClipLoader color="#002fff" /></button>
+                :
+                <button style={isDisabled ? { backgroundColor: "rgb(21, 255, 0)" } : {}} onClick={handlePix}>{title}</button>
+                }
+                
+
+
+                </div>
+
+
+            )}
+
 
         </section>
 

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { createContext } from "react";
 import { auth, db } from "../services/firebaseConnection";
 import {onAuthStateChanged} from "firebase/auth"
-import {doc, collection, getDoc} from "firebase/firestore"
+import {doc, collection, getDoc, onSnapshot} from "firebase/firestore"
 
 export const DataContext = createContext({})
 
@@ -28,21 +28,18 @@ export const DataContext = createContext({})
                             var uid = user.uid
 
                             var docRef = doc(db, "users", uid)
-                            await getDoc(docRef).then( (value) => {
+                            const unsub = onSnapshot(docRef, (queryrSnapshot) => {
 
+                            
                                 setUser({
                                     
                                     uid: uid,
-                                    name: value.data().name,
-                                    cpf: value.data().cpf,
-                                    email: value.data().email,
-                                    saldo: value.data().saldo
+                                    name: queryrSnapshot.data().name,
+                                    cpf: queryrSnapshot.data().cpf,
+                                    email: queryrSnapshot.data().email,
+                                    saldo: queryrSnapshot.data().saldo
 
                                 })
-
-                            }).catch(err => {
-
-                                console.log(err)
 
                             })
     
