@@ -1,3 +1,4 @@
+
 .account-container {
 
     width: 100%;
@@ -24,14 +25,17 @@ section.account-conteudo {
 }
 
 section.account-conteudo h1{
-    
+
+    font-family: Arial, Helvetica, sans-serif;
     margin-bottom: 40px;
 
 }
 
+
 .account-saldo {
 
     width: 20%;
+    min-width: 220px;
     margin: 0 auto;
     display: flex;
     justify-content: center;
@@ -41,10 +45,17 @@ section.account-conteudo h1{
     background-color: #fff;
     padding: 50px;
     font-size: 30px;
-    border-radius: 4px;
+    border-radius: 10px;
     margin-bottom: 50px;
     text-align: center;
 
+}
+
+.account-saldo .icon-eyes {
+
+    margin-top: -30px;
+    margin-left: 200px;
+    cursor: pointer;
 }
 
 .area-btn {
@@ -101,7 +112,7 @@ section.account-conteudo h1{
 .area-input {
 
     width: 600px;
-    height: 700px;
+    height: 450px;
     position: absolute;
     top: 10%;
     background-color: #000000;
@@ -110,7 +121,7 @@ section.account-conteudo h1{
     display: flex;
     flex-direction: column;
     border-radius: 20px;
-    animation: animation 1s;
+    animation: animation 0.5s;
     
 
 }
@@ -214,6 +225,13 @@ button.close {
 
 }
 
+button.close:hover {
+
+    color: red;
+
+}
+
+
 button.cancel:hover {
 
     background-color: red;
@@ -248,23 +266,269 @@ button.transfer {
     width: 90%;
     display: flex;
     justify-content: end;
+    align-items: center;
     
 
  }
-.account-logout {
+
+button.account-loan {
+    
+    background-color: rgb(10, 248, 41);
+    padding: 12px 15px;
+    margin-right: 50px;
+    color: black;
+    border-radius: 2px;
+    border: 0;
+    font-size: 18px;
+    cursor: pointer;
+    transition: ease-in-out 1s;
+
+    &&:hover {
+
+        background-color: rgb(70, 255, 95);
+
+    }
+
+ }
+
+ 
+button.account-logout {
     
     
-    background-color: rgb(0, 225, 255);
+    background-color: rgb(199, 52, 52);
     padding: 12px 15px;
     margin-right: 50px;
     color: black;
     border-radius: 5px;
     border: 0;
     font-size: 18px;
+    color: #fff;
     cursor: pointer;
+    transition: ease-in-out 1s;
+
+    &&:hover {
+
+        background-color: rgb(194, 25, 25);
+
+    }
     
 }
 
+.area-bot { 
+
+    display: flex;
+    position: absolute;
+    gap: 30px;
+    bottom: 5%;
+    left: 80%;
+    cursor: pointer;
+    animation: enterBot 2s;
+
+
+}
+
+.area-bot .chat {
+
+    
+    width: 250px;
+    height: 450px;
+    background-color: #fff;
+    cursor: auto;
+    overflow-y: auto;
+    padding-bottom: 20px;
+    animation: enterChat 1s;
+
+}
+
+.chat .msg-bot {
+
+    padding: 20px 20px;
+
+}
+
+.chat .msg-bot p {
+    
+    display: flex;
+    justify-content: start;
+    font-size: 16px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    color: black;
+    background-color: #beb7b75d;
+    padding: 15px;
+    text-align: left;
+    letter-spacing: 1px;
+
+}
+
+.chat .msg-user {
+
+    padding: 20px 20px;
+
+}
+
+.chat .msg-user p {
+    
+    display: flex;
+    justify-content: end;
+    font-size: 16px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    color: black;
+    background-color: #beb7b75d;
+    padding: 15px;
+    text-align: left;
+    letter-spacing: 1px;
+
+}
+
+.chat .response-bot {
+
+    padding: 20px 20px;
+
+}
+
+.chat .response-bot p {
+
+    display: flex;
+    justify-content: start;
+    font-size: 12px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    color: black;
+    background-color: #beb7b75d;
+    padding: 15px;
+    text-align: left;
+    letter-spacing: 1px;
+    white-space: pre-line;
+
+}
+
+
+input.input-chat {  
+
+    padding: 20px;
+    margin-bottom: 20px;
+    width: 70%;
+    display: flex;
+    margin: 20px auto;
+    outline: none;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+
+}
+
+button.send-msg {
+
+    padding: 10px 12px;
+    width: 85%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    border: 0;
+    text-align: center;
+    background-color: rgb(0, 255, 0);
+    color: black;
+    cursor: pointer;
+
+}
+
+.second-close {
+
+    width: 30px;
+    height: 30px;
+    border-radius: 20px;
+    border: 0;
+    background-color: #000000;
+    color: #fff;
+    float: right;
+    margin-top: -40px;
+    cursor: pointer;
+
+}
+
+
+@keyframes enterBot {
+
+    0% {
+
+        opacity: 0;
+
+
+    } 
+
+    50% {
+
+        opacity: 0;
+
+    }
+    
+    100% {
+
+        opacity: 1;
+        
+    }
+    
+}
+@keyframes enterChat{
+
+    0% {
+
+        opacity: 0;
+
+
+    } 
+    
+    100% {
+
+        opacity: 1;
+        
+    }
+    
+}
+
+
+
+@media (max-width: 1700px) {
+    .area-bot { 
+        
+        display: block;
+        position: relative;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        
+    }
+
+    .area-bot .chat {
+
+        position: absolute;
+        width: 100%;
+        height: 110vh;
+        padding: 70px 0;
+        
+    }
+
+    input.input-chat {  
+
+        width: 80%;
+        
+    
+    }
+
+    .chat .response-bot p {
+
+        white-space: pre-line;
+        font-size: 16px;
+        text-align: left;
+        letter-spacing: 2px;
+    
+    }
+
+
+    
+
+}
 
 @media(max-width: 1300px) {
 
@@ -274,7 +538,13 @@ button.transfer {
     
     }
 
-    .account-logout {
+    button.account-loan { 
+
+        margin-top: 30px;
+
+    }
+
+    button.account-logout {
 
         margin-top: 30px;
 

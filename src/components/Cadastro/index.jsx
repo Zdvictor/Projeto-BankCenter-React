@@ -21,6 +21,9 @@ import { setDoc, doc, query, where, collection, getDoc, getDocs } from 'firebase
 import {createUserWithEmailAndPassword} from "firebase/auth"
 import { toast } from 'react-toastify';
 import validator from "validator"
+import BasicDatePicker from '../date';
+import { BiSolidShow } from "react-icons/bi";
+import { FaEyeSlash } from "react-icons/fa";
 
 function Copyright(props) {
   return (
@@ -35,7 +38,6 @@ function Copyright(props) {
   );
 }
 
-// TODO remove, this demo shouldn't need to reset the theme.
 
 const defaultTheme = createTheme();
 
@@ -45,7 +47,11 @@ export default function SignUp() {
   const [document, setDocumentId] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
+  const [confirmPassword, setConfirmPassword] = useState("")
+  const [date, setDate] = useState("")
   const [loading, setLoading] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
+  const [showConfirmPassword, setConfirmShowPassword] = useState(false)
 
   const {cpf, setCpf, setLogado, setUser} = useContext(DataContext)
   const navigate = useNavigate()
@@ -104,8 +110,43 @@ export default function SignUp() {
 
       setPassword(e.target.value)
 
+    }else if(e.target.name == "confirmpassword") {
+
+      setConfirmPassword(e.target.value)
+
     }
+
+    console.log(date, confirmPassword)
     
+
+
+  }
+
+  function fixDate() {
+
+    const birthDateObj = new Date(date);
+    const today = new Date(); 
+    var age = today.getFullYear() - birthDateObj.getFullYear(); 
+    const monthDifference = today.getMonth() - birthDateObj.getMonth();
+
+
+    if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthDateObj.getDate())) {
+
+      age--;
+
+    }
+
+  
+    if (age >= 18) {
+ 
+      return true
+
+    } else {
+
+      return false
+
+    }
+
 
 
   }
@@ -137,8 +178,28 @@ export default function SignUp() {
 
       return
 
-    }
+    }else if(confirmPassword !== password) {
+      
+    toast.error("Confirme a Mesma Senha")
 
+    return
+
+  }else if(date == "" || date == " ") {
+
+      toast.error("Data Invalida")
+
+      return
+
+  }
+
+  var isOfAge = fixDate()
+
+  if(!isOfAge) {
+
+    toast.error("Menor de Idade")
+    return
+  }
+    
     setLoading(true)
 
     SignUp()
@@ -167,6 +228,7 @@ export default function SignUp() {
           name: name,
           cpf: document,
           saldo: 10,
+          birthDate: date
 
         }).then( () => {
 
@@ -209,18 +271,23 @@ export default function SignUp() {
         <Box
           sx={{
             marginTop: 8,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
             Cadastro
           </Typography>
-          <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+          <Box
+            component="form"
+            noValidate
+            onSubmit={handleSubmit}
+            sx={{ mt: 3 }}
+          >
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <TextField
@@ -255,27 +322,75 @@ export default function SignUp() {
                   label="Email"
                   name="email"
                   autoComplete="email"
-                  type='email'
+                  type="email"
                   value={email}
                   onChange={handleChange}
                 />
               </Grid>
+              
               <Grid item xs={12}>
                 <TextField
                   required
                   fullWidth
                   name="password"
                   label="Senha"
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   id="password"
                   autoComplete="new-password"
                   value={password}
                   onChange={handleChange}
                 />
+
+                {!showPassword ? ( <BiSolidShow onClick={() => setShowPassword(!showPassword)} size={25} style={{position: 'absolute', marginTop: 15, marginLeft: 2, cursor: 'pointer'}}  />  ) :  (<FaEyeSlash onClick={() => setShowPassword(!showPassword)} size={20} style={{position: 'absolute', marginTop: 18, marginLeft: 5, cursor: 'pointer'}} /> ) }
+
+                
+
+                <TextField
+                  required
+                  fullWidth
+                  name="confirmpassword"
+                  label="Confirmar Senha"
+                  type={showConfirmPassword ? "text" : "password"}
+                  id="password"
+                  autoComplete="new-password"
+                  value={confirmPassword}
+                  onChange={handleChange}
+                  style={{marginTop: 15}}
+                />
+
+                 {
+                 !showConfirmPassword ?
+                  ( 
+                  <BiSolidShow onClick={() => setConfirmShowPassword(!showConfirmPassword)} size={25} style={{position: 'absolute', marginTop: 30, marginLeft: 2, cursor: 'pointer'}}  />  
+                  ) :  
+                  (
+                  <FaEyeSlash onClick={() => setConfirmShowPassword(!showConfirmPassword)} size={20} style={{position: 'absolute', marginTop: 30, marginLeft: 5, cursor: 'pointer'}} /> 
+                  )
+                   }
+
+                <input
+                  name="date"
+                  value={date}
+                  onChange={(e) => setDate(e.target.value)}
+                  style={{
+                    width: "100%",
+                    height: 45,
+                    padding: 13,
+                    fontSize: 18,
+                    marginTop: 15,
+                    outline: "none"
+                    
+                  }}
+                  type="date"
+                />
+
               </Grid>
+
               <Grid item xs={12}>
                 <FormControlLabel
-                  control={<Checkbox value="allowExtraEmails" color="primary" />}
+                  control={
+                    <Checkbox value="allowExtraEmails" color="primary" />
+                  }
                   label="Gostaria de receber atualizações, ofertas exclusivas e novidades sobre nossos serviços diretamente no seu e-mail."
                 />
               </Grid>
@@ -290,7 +405,11 @@ export default function SignUp() {
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
-                <Link style={{color: "blue", fontSize: 15}} to="/login" variant="body2">
+                <Link
+                  style={{ color: "blue", fontSize: 15 }}
+                  to="/login"
+                  variant="body2"
+                >
                   Já tem uma conta? Faça o login
                 </Link>
               </Grid>

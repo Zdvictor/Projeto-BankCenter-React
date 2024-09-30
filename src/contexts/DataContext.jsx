@@ -12,6 +12,7 @@ export const DataContext = createContext({})
         const [logado, setLogado] = useState(false)
         const [loading, setLoading] = useState(true)
         const [user, setUser] = useState({})
+        const [input, setInput] = useState(false)
 
         useEffect( () => {
 
@@ -37,7 +38,7 @@ export const DataContext = createContext({})
                                     name: queryrSnapshot.data().name,
                                     cpf: queryrSnapshot.data().cpf,
                                     email: queryrSnapshot.data().email,
-                                    saldo: queryrSnapshot.data().saldo
+                                    saldo: queryrSnapshot.data().saldo.toFixed(2)
 
                                 })
 
@@ -77,7 +78,7 @@ export const DataContext = createContext({})
 
         return (
 
-            <DataContext.Provider value={{cpf, setCpf, logado, setLogado, loading, user, setUser}}>
+            <DataContext.Provider value={{cpf, setCpf, logado, setLogado, loading, user, setUser, input, setInput}}>
 
                 {children}
 

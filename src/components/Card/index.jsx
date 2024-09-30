@@ -47,7 +47,7 @@ export default function RecipeReviewCard(props) {
 
       <CardContent>
         <Typography variant="body2" color="text.secondary">
-          {props.description}
+          <i>{props.description}</i>
         </Typography>
       </CardContent>
 

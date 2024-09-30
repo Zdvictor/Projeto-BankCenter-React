@@ -1,18 +1,35 @@
-import { useState, useContext } from "react"
+//REACT
+import { useState, useContext , useEffect, useRef} from "react"
 import { useNavigate } from "react-router-dom"
+
+//TYPEWRITER
 import {useTypewriter} from "react-simple-typewriter"
+
+//MATERIAL UI COMPONENTS
 import RecipeReviewCard from "../Card"
-import { cpfMask } from "../Mask"
 import CustomMarks from "../Sliders/index"
-import "./homeComponent.css"
+
+//CPF MASK
+import { cpfMask } from "../Mask"
+
+//DATA CONTEXT
 import { DataContext } from "../../contexts/DataContext"
+
+//TOASTIFY
 import { toast } from "react-toastify"
 
-//img
+//CSS
+import "./homeComponent.css"
+
+//IMG
 import usuarioCelular from "../../assets/user-celular.png"
 import userOne from "../../assets/img1-user.png"
 import userTwo from "../../assets/img2-user.png"
 import userThree from "../../assets/img3-user.png"
+import Card from "../../assets/card.png"
+import Suport from "../../assets/suporte.png"
+import Pix from "../../assets/pix.png"
+
 
 function HomeComponent() {
 
@@ -23,6 +40,8 @@ function HomeComponent() {
             <StartHome />
             <RatherHome />
             <LoanHome />
+            <BenefitsHome />
+
         </>
 
     )
@@ -187,11 +206,98 @@ function LoanHome() {
 
                 </article>
             </section>
+            
         </div>
 
     )
 
 }
+
+function BenefitsHome() {
+
+    const [showAnimation, setShowAnimation] = useState(false)
+    const animation = useRef()
+
+    useEffect(() => {
+
+        function Observable() {
+
+            var observable = new IntersectionObserver( obs => {
+
+
+                if(obs[0].isIntersecting) {
+
+                    setShowAnimation(true)
+
+                }else {
+
+                    setShowAnimation(false)
+
+                }
+
+
+            })
+
+
+            var ref = animation.current
+
+            observable.observe(ref)
+
+
+
+
+        }
+
+
+        Observable()
+
+    } ,[])
+
+    return (
+
+        <div>
+            <section className="benefits ">
+
+                <h2>Melhores Benefícios</h2>
+                
+                <article ref={animation} className={showAnimation ? "benefits animationBenefits" : "benefits" }>
+
+                    <div className="benefits-box ">
+                        <img src={Card} />
+
+                        <p>
+                         Abra sua conta agora e tenha um cartão cheio de benefícios exclusivos,
+                         com zero anuidade! Aproveite todas as vantagens sem custo e com a praticidade que você merece.
+                        </p>
+                    </div>
+
+                    <div className="benefits-box">
+                        <img src={Suport} />
+
+                        <p>
+                        Contamos com uma equipe dedicada e pronta para oferecer o melhor atendimento sempre que você precisar.
+                         Nosso suporte é ágil, eficiente e focado em resolver suas dúvidas e problemas da maneira mais rápida possível.
+                        </p>
+                    </div>
+
+                    <div className="benefits-box">
+                        <img src={Pix} />
+
+                        <p>
+                        Pix com transferências ilimitadas, a qualquer momento e sem complicações
+                        Agilidade e praticidade para enviar e receber dinheiro 24 horas por dia, todos os dias da semana!
+                        </p>
+                    </div>
+                
+                </article>
+            </section>
+            
+        </div>
+
+    )
+
+}
+
 
 
 export default HomeComponent
