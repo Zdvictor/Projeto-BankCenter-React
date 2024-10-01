@@ -156,7 +156,9 @@ function RatherHome() {
                     name="Jorge"
                     width="100px"
                     description="Melhor banco que já usei! A conta é 100% gratuita e oferece todos os serviços que preciso sem nenhuma taxa escondida. Super recomendo!"
-                    img={userOne} />
+                    img={userOne} 
+                    date={" 15 Abril 2024"}
+                    />
 
                 </aside>
 
